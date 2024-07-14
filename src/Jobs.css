@@ -1,0 +1,29 @@
+.link{
+    text-decoration: none;
+}
+
+.list-group {
+    margin-top: 10%;
+}
+
+.list-group-item-jobs{
+    border: none;
+    width: 50%;
+    margin: auto;
+}
+
+.list-group-jobs {
+    margin-top: 1rem;
+    color: white;
+    margin-bottom: 15px;
+
+}
+
+.list-group-item-jobs {
+    background-color: transparent;
+    font-weight: bold;
+}
+
+.job-card{
+    width:50%;
+}

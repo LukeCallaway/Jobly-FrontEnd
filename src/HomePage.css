@@ -1,0 +1,10 @@
+
+.home-brand,
+.home-desc{
+    width: 50%;
+    margin: auto;
+}
+
+.home-desc{
+    font-size: 18px;
+}
