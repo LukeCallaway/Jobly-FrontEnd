@@ -26,11 +26,8 @@ const Profile = ({ updateUserInfo }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    try{
-      updateUserInfo(formData);
-    }catch(err){
-      console.log(err)
-    }
+    updateUserInfo(formData);
+
 
   }
 

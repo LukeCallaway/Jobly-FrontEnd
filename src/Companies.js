@@ -16,11 +16,11 @@ function Companies({companies, updateCompaniesList}) {
       <SearchCompaniesForm updateCompaniesList={updateCompaniesList}/>
       <ListGroup>
 
-      {companies ? companies.map(company => 
+      {companies.map(company => 
 
       <Link style={{ textDecoration: 'none' }} to={`/companies/${company.handle}`}>
         <ListGroupItem>
-          <div col></div>
+
         <CompanyCard 
           name={company.name} 
           description={company.description} 
@@ -29,7 +29,7 @@ function Companies({companies, updateCompaniesList}) {
       </ ListGroupItem>
       </Link>
       )
-      : <p>No Companies found</p>}
+     }
 
       </ListGroup>
     </section>

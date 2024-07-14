@@ -55,14 +55,12 @@ function App() {
     setToken(res.token);
 
     const user = await getUserInfo(decoded.username);
-    console.log(user)
     setCurrUser(user);
   }
 
 
   const doSignUp = async (data) => {
     const res = await JoblyApi.register({...data});
-    console.log('sign up res', res, 'data', data)
     setCurrUser({username: data.username, 
                  firstName: data.firstName, 
                  lastName: data.lastName,
@@ -83,9 +81,7 @@ function App() {
 
   const applyToJob = async (jobId) => {
     const res = await JoblyApi.applyToJob(currUser.username, jobId, 'post')
-    console.log(res)
     setCurrUser({...currUser, applications:[...currUser.applications, jobId]})
-    console.log(currUser)
   }
 
   if (isLoading) {
