@@ -61,12 +61,14 @@ function App() {
 
   const doSignUp = async (data) => {
     const res = await JoblyApi.register({...data});
+    await JoblyApi.setToken(res.token);
+    setToken(res.token);
+    
     setCurrUser({username: data.username, 
                  firstName: data.firstName, 
                  lastName: data.lastName,
                  email: data.email, 
                  applications: []});
-    setToken(res);
   }
 
   const doLogout = () => {

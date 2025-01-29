@@ -49,7 +49,7 @@ const Signup = ({ doSignUp }) => {
       <input
         className='form-input'
         id="password"
-        type="text"
+        type="password"
         name="password"
         value={formData.password}
         onChange={handleChange}
