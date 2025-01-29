@@ -6,7 +6,7 @@ function HomePage() {
   return (
     <section>
       <h1 className="home-brand"><b>Jobly</b></h1>
-      <p className="home-desc">These are the jobs you're looking for.</p>
+      <p className="home-desc">Welcome To Jobly!</p>
     </section>
   );
 }
