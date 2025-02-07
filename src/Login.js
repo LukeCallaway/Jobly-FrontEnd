@@ -1,5 +1,6 @@
 import React, {useState, useContext} from 'react'
 import { Navigate} from 'react-router-dom'
+import { useFormik } from 'formik'
 
 import UserContext from "./UserContext";
 
@@ -7,32 +8,29 @@ import './Login.css'
 
 function Login ({ doLogin }) {
 
-
-  const INITIAL_STATE = {
-    username: '',
-    password: ''
+  const validate = (values) =>{
+    const errors = {};
+    if(!values.username) errors.username = 'Required';
+    if(!values.password) errors.password = 'Required';
+    return errors;
   }
-  const [formData, setFormData] = useState(INITIAL_STATE);
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: ''
+    },
+    validate,
+    onSubmit: (values) => {
+      doLogin({...values});
+    }
+  });
   
   const currUser = useContext(UserContext)
   if(currUser.username) return <Navigate to='/' />
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(formData => ({
-      ...formData,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    doLogin(formData);
-
-  }
-
   return (
-    <form onSubmit={handleSubmit} className='form'>
+    <form onSubmit={formik.handleSubmit} className='form'>
       <label htmlFor="username" className='form-labels'>Username</label>
       <br></br>
       <input
@@ -40,9 +38,11 @@ function Login ({ doLogin }) {
         id="username"
         type="text"
         name="username"
-        value={formData.username}
-        onChange={handleChange}
+        value={formik.values.username}
+        onChange={formik.handleChange}
       />
+      {formik.errors.username ? <div className='errors'>{formik.errors.username}</div> : null}
+
       <br></br>
       <label htmlFor="password" className='form-labels'>Password</label>
       <br></br>
@@ -51,11 +51,13 @@ function Login ({ doLogin }) {
         id="password"
         type="password"
         name="password"
-        value={formData.password}
-        onChange={handleChange}
+        value={formik.values.password}
+        onChange={formik.handleChange}
       />
+      {formik.errors.password ? <div className='errors'>{formik.errors.password}</div> : null}
+
       <br></br>
-      <button className='form-btn'>Log In</button>
+      <button type='submit' className='form-btn'>Log In</button>
     </form>
   )
 }

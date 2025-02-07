@@ -1,38 +1,38 @@
-import React, {useState, useContext} from 'react'
-import {Navigate} from 'react-router-dom'
+import React, {useState, useContext} from 'react';
+import {Navigate} from 'react-router-dom';
+import { useFormik } from 'formik';
 
 import UserContext from "./UserContext";
 
 
 const Profile = ({ updateUserInfo }) => {
-  const currUser = useContext(UserContext)
-
-  const INITIAL_STATE = {
-    firstName: currUser.firstName,
-    lastName: currUser.lastName,
-    email: currUser.email
-  }
-  const [formData, setFormData] = useState(INITIAL_STATE);
-
+  const currUser = useContext(UserContext);
   if(!currUser.username) return <Navigate to='/' />
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(formData => ({
-      ...formData,
-      [name]: value
-    }))
-  }
+  const validate = (values) => {
+    const errors = {};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateUserInfo(formData);
-
+    if(!values.firstName) errors.firstName = 'Required';
+    if(!values.lastName) errors.lastName = 'Required';
+    if(!values.email) errors.email = 'Required';
 
   }
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: currUser.firstName,
+      lastName: currUser.lastName,
+      email: currUser.email
+    },
+    validate,
+    onSubmit: (values) => {
+      updateUserInfo({...values});
+    }
+  });
+
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={formik.handleSubmit}>
       <label htmlFor="firstName" className='form-labels'>First Name</label>
       <br></br>
       <input
@@ -41,9 +41,10 @@ const Profile = ({ updateUserInfo }) => {
         type="text"
         name="firstName"
         placeholder={`First Name`}
-        value={formData.firstName}
-        onChange={handleChange}
+        value={formik.values.firstName}
+        onChange={formik.handleChange}
       />
+      {formik.errors.firstName ? <div className='errors'>{formik.errors.firstName}</div> : null}
       <br></br>
 
       <label htmlFor="lastName" className='form-labels'>Last Name</label>
@@ -54,9 +55,10 @@ const Profile = ({ updateUserInfo }) => {
         type="text"
         name="lastName"
         placeholder={`Last Name`}
-        value={formData.lastName}
-        onChange={handleChange}
+        value={formik.values.lastName}
+        onChange={formik.handleChange}
       />
+      {formik.errors.lastName ? <div className='errors'>{formik.errors.lastName}</div> : null}
       <br></br>
 
       <label htmlFor="email" className='form-labels'>Email</label>
@@ -67,16 +69,16 @@ const Profile = ({ updateUserInfo }) => {
         type="text"
         name="email"
         placeholder={`Email`}
-        value={formData.email}
-        onChange={handleChange}
+        value={formik.values.email}
+        onChange={formik.handleChange}
       />
+      {formik.errors.email ? <div className='errors'>{formik.errors.email}</div> : null}
       <br></br>
 
-      <button className='form-btn'>Edit Profile</button>
+      <button type='submit' className='form-btn'>Edit Profile</button>
     </form>
     
   )
-
 }
 
 export default Profile;

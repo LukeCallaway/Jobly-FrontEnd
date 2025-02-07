@@ -18,11 +18,11 @@ import useLocalStorageState from './hooks/useLocalStorage';
 import UserContext from './UserContext';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [companies, setCompanies] = useState([])
-  const [jobs, setJobs] = useState([])
-  const [token, setToken] = useLocalStorageState('token', '')
-  const [currUser, setCurrUser] = useLocalStorageState('currUser', [])
+  // const [isLoading, setIsLoading] = useState(true);
+  const [companies, setCompanies] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [token, setToken] = useLocalStorageState('token', '');
+  const [currUser, setCurrUser] = useLocalStorageState('currUser', []);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,8 +30,8 @@ function App() {
       let companies = await JoblyApi.getAllCompanies();
       let jobs = await JoblyApi.getAllJobs();
       setCompanies(companies);
-      setJobs(jobs)
-      setIsLoading(false);
+      setJobs(jobs);
+      // setIsLoading(false);
     }
     getDetails();
   }, []);
@@ -49,26 +49,34 @@ function App() {
   }
 
   const doLogin = async (data) => {
-    const res = await JoblyApi.login(data);
-    const decoded = jwtDecode(res.token);
-    await JoblyApi.setToken(res.token);
-    setToken(res.token);
-
-    const user = await getUserInfo(decoded.username);
-    setCurrUser(user);
+    try {
+      const res = await JoblyApi.login(data);
+      const decoded = jwtDecode(res.token);
+      await JoblyApi.setToken(res.token);
+      setToken(res.token);
+  
+      const user = await getUserInfo(decoded.username);
+      setCurrUser(user);
+    } catch(e) {
+      console.log(e)
+      alert('Invalid Username or Password');
+    }
   }
 
-
   const doSignUp = async (data) => {
-    const res = await JoblyApi.register({...data});
-    await JoblyApi.setToken(res.token);
-    setToken(res.token);
-    
-    setCurrUser({username: data.username, 
-                 firstName: data.firstName, 
-                 lastName: data.lastName,
-                 email: data.email, 
-                 applications: []});
+    try {
+      const res = await JoblyApi.register({...data});
+      await JoblyApi.setToken(res.token);
+      setToken(res.token);
+      
+      setCurrUser({username: data.username, 
+                   firstName: data.firstName, 
+                   lastName: data.lastName,
+                   email: data.email, 
+                   applications: []});
+    } catch(e){
+      alert('Username Already Taken');
+    }
   }
 
   const doLogout = () => {
@@ -86,9 +94,9 @@ function App() {
     setCurrUser({...currUser, applications:[...currUser.applications, jobId]})
   }
 
-  if (isLoading) {
-    return <p>Loading &hellip;</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading &hellip;</p>;
+  // }
 
   return (
     <>
