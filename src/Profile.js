@@ -7,7 +7,6 @@ import UserContext from "./UserContext";
 
 const Profile = ({ updateUserInfo }) => {
   const currUser = useContext(UserContext);
-  if(!currUser.username) return <Navigate to='/' />
 
   const validate = (values) => {
     const errors = {};
@@ -30,7 +29,8 @@ const Profile = ({ updateUserInfo }) => {
     }
   });
 
-
+  if(!currUser.username) return <Navigate to='/' />
+  
   return (
     <form onSubmit={formik.handleSubmit}>
       <label htmlFor="firstName" className='form-labels'>First Name</label>
